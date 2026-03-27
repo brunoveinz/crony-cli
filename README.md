@@ -1,6 +1,6 @@
 # Crony
 
-Crony es un gestor local de cron jobs multiplataforma (macOS, Linux, Windows) sin dependencia de `crontab` ni `Task Scheduler`.
+Crony is a lightweight, cross-platform local cron job manager (macOS, Linux, Windows) with no dependency on `crontab` or `Task Scheduler`.
 
 ## Idiomas / Languages
 
@@ -18,110 +18,110 @@ Supported languages: `en` (English), `es` (Spanish)
 
 ---
 
-## Arquitectura
+## Architecture
 
-- **Demonio**: motor en segundo plano con APScheduler (`crony.daemon`).
-- **Base de datos**: SQLite `~/.crony/jobs.db` con tabla `jobs` y `job_runs`.
-- **CLI**: comandos con Typer + Rich en `crony.cli`.
+- **Daemon**: Background engine powered by APScheduler (`crony.daemon`).
+- **Database**: SQLite `~/.crony/jobs.db` with `jobs` and `job_runs` tables.
+- **CLI**: Interactive and intuitive commands built with Typer + Rich in `crony.cli`.
 
-## Instalación (desarrollo)
+## Installation (Development)
 
 ```bash
 python -m pip install -e .
 ```
 
-## Uso
+## Usage
 
-### Vista de estado (ejecuta `crony` sin argumentos)
+### Status overview (run `crony` without arguments)
 ```bash
 $ crony
 
 Crony
 
-  daemon    detenido
-  tareas     1 activas, 0 pausadas
+  daemon    stopped
+  tasks     1 active, 0 paused
 
-Comandos:
-  crony start                        iniciar daemon
-  crony stop                         detener daemon
-  crony status                       estado daemon
-  crony list                         listar tareas
-  crony add <nombre> <cron> <cmd>    agregar tarea
-  crony config                       configuracion
-  crony --help                       ayuda completa
+Commands:
+  crony start                        start daemon
+  crony stop                         stop daemon
+  crony status                       daemon status
+  crony list                         list tasks
+  crony add <name> <cron> <cmd>      add task
+  crony config                       interactive configuration
+  crony --help                       full help
 ```
 
-### Demonio
+### Daemon
 
-Iniciar demonio:
+Start daemon:
 ```bash
 crony start
 ```
 
-Estado:
+Status:
 ```bash
 crony status
 ```
 
-Detener:
+Stop:
 ```bash
 crony stop
 ```
 
-Mostrar ayuda general:
+Show general help:
 ```bash
 crony --help
 ```
 
-Agregar tarea manual:
+Add a task manually:
 ```bash
 crony add "backup" "0 3 * * *" "echo hi"
 ```
 
-Importar desde archivo:
+Import from file:
 ```bash
 crony import crony.yml
-# ó
+# or
 crony import crony.json
 ```
 
-Listar:
+List tasks:
 ```bash
 crony list
 ```
 
-Muestra tabla con ID, nombre, cron, comando, estado, última ejecución, resultado (ok/error), duración.
+Displays a table with ID, name, cron, command, status, last execution, result (ok/error), and duration.
 
-Ver tareas programadas:
+View scheduled tasks:
 ```bash
 crony tasks
 ```
 
-Muestra resumen total/activas/inactivas y tabla con próximas ejecuciones.
+Shows a summary of total/active/inactive tasks and a table with their next scheduled execution times.
 
 Logs:
 ```bash
 crony logs 1
 ```
 
-Pausar:
+Pause a task:
 ```bash
 crony pause 1
 ```
 
-Reanudar:
+Resume a task:
 ```bash
 crony resume 1
 ```
 
-Quitar:
+Remove a task:
 ```bash
 crony remove 1
 ```
 
-## Formato de archivo de configuración
+## Configuration File Format
 
-Crea un archivo `crony.yml` o `crony.json` en tu proyecto para definir servicios:
+Create a `crony.yml` or `crony.json` file in your project to define services:
 
 ### YAML (crony.yml)
 ```yaml
@@ -157,69 +157,40 @@ services:
 }
 ```
 
-Luego importa:
+Then import it:
 ```bash
 crony import crony.yml
-crony --start
-```
-Agregar tarea:
-```bash
-crony add "backup" "0 3 * * *" "echo hi"
+crony start
 ```
 
-Listar:
-```bash
-crony list
-```
+## For Project Users
 
-Logs:
-```bash
-crony logs 1
-```
+If a project includes a `crony.yml` or `crony.json` file, you can easily automate it:
 
-Pausar:
-```bash
-crony pause 1
-```
+1. Install crony: `pipx install crony` (or `pip install crony`)
+2. Go to the project directory
+3. Import tasks: `crony import crony.yml`
+4. **Configure email (optional)**: `crony config`
+5. Start the daemon: `crony start`
+6. List tasks: `crony list`
+7. View logs: `crony logs <id>`
 
-Reanudar:
-```bash
-crony resume 1
-```
-
-Quitar:
-```bash
-crony remove 1
-```
-
-## Para usuarios de proyectos
-
-Si un proyecto incluye un archivo `crony.yml` o `crony.json`, puedes automatizarlo fácilmente:
-
-1. Instala crony: `pipx install crony` (o `pip install crony`)
-2. Ve al directorio del proyecto
-3. Importa las tareas: `crony import crony.yml`
-4. **Configura email (opcional)**: `crony config email --email tu@email.com --password tu-password`
-5. Inicia el demonio: `crony --start`
-6. Lista las tareas: `crony list`
-7. Ve los logs: `crony logs <id>`
-
-### Ejemplo rápido para desarrolladores:
+### Quick example for developers:
 
 ```bash
-# Configurar Gmail para notificaciones
+# Configure Gmail for notifications
 crony config
 
-# Importar jobs del proyecto
+# Import project jobs
 crony import crony.yml
 
-# Iniciar y verificar
-crony --start
+# Start daemon and verify
+crony start
 crony list
 crony config show
 ```
 
-Ejemplo de `crony.yml` para un proyecto con Docker:
+Example `crony.yml` for a Docker project:
 
 ```yaml
 version: 1
@@ -235,11 +206,11 @@ services:
     cmd: "docker compose run --rm pipeline python outreach.py"
 ```
 
-## Notificaciones por Email
+## Email Notifications
 
-Crony puede enviarte notificaciones por email cuando tus jobs se ejecuten. Configura SMTP en `crony.yml`:
+Crony can send HTML-formatted email notifications when your jobs execute. 
 
-### Configuración básica (Gmail):
+### Basic Configuration (Gmail):
 ```yaml
 version: 1
 notifications:
@@ -248,11 +219,11 @@ notifications:
     smtp:
       server: "smtp.gmail.com"
       port: 587
-      username: "tuemail@gmail.com"
-      password: "tu-app-password"
+      username: "youremail@gmail.com"
+      password: "your-app-password"
       use_tls: true
     recipients:
-      - "tuemail@gmail.com"
+      - "youremail@gmail.com"
 
 services:
   scraper:
@@ -264,82 +235,83 @@ services:
       include_logs: true
 ```
 
-### Para Gmail - App Password:
-1. Ve a [Google Account Settings](https://myaccount.google.com/)
+### For Gmail - App Passwords:
+1. Go to your [Google Account Settings](https://myaccount.google.com/)
 2. Security → 2-Step Verification → App passwords
-3. Genera un password para "Crony"
-4. Usa ese password (no tu contraseña normal)
+3. Generate a new password named "Crony"
+4. Use that app password (not your standard password)
 
-## Configuración desde CLI
+## CLI Configuration
 
-Para facilitar la configuración, puedes usar comandos de Crony en lugar de editar archivos YAML manualmente:
+To make configuration easier, you can use Crony's built-in commands instead of manually editing YAML files:
 
-### Configuración Interactiva (Recomendado)
+### Interactive Configuration (Recommended)
 
-**Configuración paso a paso:**
+**Step-by-step configuration:**
 ```bash
 crony config
 ```
 
-Este comando inicia un **menú interactivo continuo** donde puedes:
-1. Configurar notificaciones por email
-2. Ver configuración actual
-3. Estado de tareas
-4. Iniciar/Detener daemon
-5. Agregar/Eliminar tareas
-6. Ver logs
-7. Importar tareas
-8. Configurar cuándo notificar
-9. Salir
+This command launches a **continuous interactive menu** where you can:
+1. Configure email notifications
+2. View current configuration
+3. View task statuses
+4. Start/Stop the daemon
+5. Add/Delete tasks
+6. View logs
+7. Import tasks
+8. Configure when to notify
+9. Change Language
+10. Exit
 
-Después de cada acción, **regresas automáticamente al menú** para hacer más cambios sin tener que ejecutar el comando nuevamente.
+After executing any action, **you will automatically return to the menu** to make further changes without needing to run the command again.
 
-**Durante la configuración de email**, se te preguntará:
-- Cuándo enviar emails: éxito, fallo, o ambos
-- Si incluir logs en los emails
+**During email configuration**, you'll be asked:
+- When to send emails: on success, on failure, or both.
+- Whether to include execution logs in the emails.
 
-### Configuración Directa
+### Direct Configuration
 
-**Para Gmail (fácil):**
+**For Gmail (easy):**
 ```bash
-crony config email --email tuemail@gmail.com --password tu-app-password
+crony config email --email youremail@gmail.com --password your-app-password
 ```
 
-Al finalizar cualquier configuración, **se envía automáticamente un email de prueba** para verificar que las credenciales SMTP funcionen correctamente.
+Upon finishing any email configuration, **a test email is automatically sent** to verify that your SMTP credentials work correctly.
 
-**Para Outlook/Hotmail:**
+**For Outlook/Hotmail:**
 ```bash
-crony config email --provider outlook --email tuemail@outlook.com --password tu-password
+crony config email --provider outlook --email youremail@outlook.com --password your-password
 ```
 
-**Para Yahoo:**
+**For Yahoo:**
 ```bash
-crony config email --provider yahoo --email tuemail@yahoo.com --password tu-password
+crony config email --provider yahoo --email youremail@yahoo.com --password your-password
 ```
 
-**Con múltiples destinatarios:**
+**With multiple recipients:**
 ```bash
-crony config email --email tuemail@gmail.com --password tu-app-password --recipients "otro@email.com,equipo@email.com"
+crony config email --email youremail@gmail.com --password your-app-password --recipients "other@email.com,team@email.com"
 ```
 
-### Gestión de Configuración
+### Configuration Management
 
-**Ver configuración actual:**
+**View current config:**
 ```bash
 crony config show
 ```
 
-**Deshabilitar notificaciones:**
+**Disable notifications:**
 ```bash
 crony config disable-email
 ```
 
-### Emails que recibirás:
-- **Éxito**: "Crony: tarea 'scraper' completada"
-- **Fallo**: "Crony: tarea 'scraper' fallo"
-- Incluye duración, stdout/stderr según configuración
+### Emails you'll receive:
+- **Success**: "Crony: task 'scraper' completed" (Green styling)
+- **Failure**: "Crony: task 'scraper' failed" (Red styling)
+- Both include duration and stdout/stderr depending on your config.
 
-### Otros proveedores:
+### Other providers:
 ```yaml
 # Outlook/Hotmail
 smtp:
@@ -351,9 +323,9 @@ smtp:
   server: "smtp.mail.yahoo.com"
   port: 587
 
-# Tu propio servidor
+# Your own server
 smtp:
-  server: "mail.tudominio.com"
+  server: "mail.yourdomain.com"
   port: 465
   use_tls: false
 ```
