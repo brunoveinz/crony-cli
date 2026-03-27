@@ -1,0 +1,22 @@
+[project]
+name = "crony"
+version = "0.1.0"
+description = "Local cross-platform cron manager with daemon + TUI-style CLI"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "typer>=0.9",
+    "rich>=13.0",
+    "apscheduler>=3.10",
+    "python-dotenv>=1.0",
+    "pyyaml>=6.0"
+]
+license = {text = "MIT"}
+authors = [{name = "Auto Generated", email = "noreply@example.com"}]
+
+[project.scripts]
+crony = "crony.cli:app"
+
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
